@@ -10,18 +10,20 @@ public class RevolverController : MonoBehaviour {
 	private float endAngle = 60F;		// rotated angle
 	private AudioSource audioSource;
 	private Animator animator;
+	private ParticleSystem particleSystem;
 
 	void Start () {
 		cylTr = cylTr.transform;
 		audioSource = GetComponent<AudioSource>();
 		animator = GetComponent<Animator>();
+		particleSystem = transform.Find("MuzzleFlashEffect").GetComponent<ParticleSystem>();
 	}
 
 	void Update () {
 		if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
+            if (Input.GetButton("Fire") || touch.phase == TouchPhase.Began)
             {
                 Fire();
             }
@@ -56,6 +58,7 @@ public class RevolverController : MonoBehaviour {
 	public void Fire() {
     	audioSource.PlayOneShot(audioSource.clip);
 		animator.SetTrigger("Fire");
+		particleSystem.Play();
 		RotateCyl();
 	}
 }
